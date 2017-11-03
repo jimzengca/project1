@@ -1,0 +1,39 @@
+#! /usr/bin/python
+###############################################################################
+# This script is used to create co information database.
+# Writen by: Jim Zeng 2015-08-04
+###############################################################################
+
+import re
+import datetime
+import sys
+import os
+import MySQLdb
+import json
+from pprint import pprint
+
+
+for root, dirs, files in os.walk("/home/jzeng/projects/cvelist"):
+#for root, dirs, files in os.walk("/home/jzeng/projects/cvelist/2017/7xxx"):
+    #print root
+    for file in files:
+        #print file
+        if not file.endswith('.json'):
+            continue
+
+        fullName = root + "/" + file 
+        with open(fullName) as data_file:    
+            data = json.load(data_file)
+            vendorName = ''
+            try: 
+                vendorName =  data['affects']['vendor']['vendor_data'][0]['vendor_name'] 
+                #problem =  data['problemtype']['problemtype_data'][0]['description'][0]['value'] 
+                #if vendorName == 'n/a':
+                #    continue
+                #else:
+                #    print vendorName 
+            except:
+                #print "file does not have problemtype!"
+                pass
+            if 'Fortinet' in vendorName:
+                print file
